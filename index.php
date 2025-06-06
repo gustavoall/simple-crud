@@ -1,5 +1,6 @@
 <?php
-require 'connect.php';
+    session_start();
+    require 'connect.php';
 ?>
 <!doctype html>
 <html lang="en">
@@ -12,6 +13,7 @@ require 'connect.php';
   <body>
     <section class="section-list">
         <div class="container mt-4">
+            <?php include('message.php');?>
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
@@ -32,11 +34,17 @@ require 'connect.php';
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <?php 
+                                        $sql = 'SELECT * FROM users';
+                                        $users = mysqli_query($connect, $sql);
+                                        if (mysqli_num_rows($users) > 0) {
+                                            foreach($users as $user) {
+                                    ?>
                                     <tr>
-                                        <td>1</td>
-                                        <td>teste</td>
-                                        <td>test@gmail.com</td>
-                                        <td>01/01/2010</td>
+                                        <td><?=$user['id']?></td>
+                                        <td><?=$user['name']?></td>
+                                        <td><?=$user['email']?></td>
+                                        <td><?=date('d/m/y', strtotime($user['date_birth']))?></td>
                                         <td>
                                             <a href="" class="btn btn-secondary btn-sm">Visualizar</a>
                                             <a href="" class="btn btn-success btn-sm">Editar</a>
@@ -45,6 +53,12 @@ require 'connect.php';
                                             </form>
                                         </td>
                                     </tr>
+                                    <?php 
+                                        }
+                                    } else {
+                                        echo '<h5>Nenhum usuário encontrado</h5>';
+                                    }
+                                    ?>
                                 </tbody>
                             </table>
                         </div>
